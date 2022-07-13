@@ -10,7 +10,15 @@ public class Main {
 
 		Scanner sc = new Scanner(System.in);
 
-		String command = sc.nextLine();
+		while (true) {
+			System.out.printf(">> ");
+			String cmd = sc.nextLine();
+			
+			if(cmd.equals("exit")) {
+				System.out.println("프로그램이 종료됩니다.");
+				break;
+			}
+		}
 		
 		System.out.println("==프로그램 끝==");
 		sc.close();
