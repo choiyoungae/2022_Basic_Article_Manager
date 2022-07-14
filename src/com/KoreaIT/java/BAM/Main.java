@@ -1,5 +1,6 @@
 package com.KoreaIT.java.BAM;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -41,17 +42,70 @@ public class Main {
 				
 			}
 			else if(cmd.equals("article write")) {
+				
+				LocalDateTime now = LocalDateTime.now();
+				
 				articleNumber++;
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
 				
-				Article article = new Article(title, body, articleNumber);
+				Article article = new Article(title, body, articleNumber, now);
 				articles.add(article);
 				
 				System.out.printf("%d번 글이 생성되었습니다.\n", articleNumber);
 				
+			}
+			else if(cmd.startsWith("article detail ")) {
+				String[] cmdArr = cmd.split(" ");
+				
+				int detailNum = Integer.parseInt(cmdArr[2]);
+				
+				Article foundArticle = null;
+				
+				for(int i=0; i<articles.size(); i++) {
+					Article article = articles.get(i);
+					
+					if(article.articleNumber == detailNum) {
+						foundArticle = article;
+						break;
+					
+					}
+				}
+				
+				if(foundArticle == null) {
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", detailNum);
+					
+				} else {
+					System.out.printf("번호 : %d\n", foundArticle.articleNumber);
+					System.out.printf("날짜 : %s\n", foundArticle.formatedNow);
+					System.out.printf("제목 : %s\n", foundArticle.title);
+					System.out.printf("내용 : %s\n", foundArticle.body);
+				}
+				
+			}
+			else if(cmd.startsWith("article delete ")) {
+				String[] cmdArr = cmd.split(" ");
+				
+				int deleteNum = Integer.parseInt(cmdArr[2]);
+				
+				boolean deleteArticle = false;
+				
+				for(int i=0; i<articles.size(); i++) {
+					Article article = articles.get(i);
+					
+					if(article.articleNumber == deleteNum) {
+						deleteArticle = true;
+						
+						articles.remove(i);
+						System.out.printf("%d번 게시글이 삭제되었습니다.\n", deleteNum);
+					}
+				}
+				
+				if(deleteArticle == false) {
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", deleteNum);
+				}
 			}
 			else {
 				System.out.println("존재하지 않는 명령어입니다.");
