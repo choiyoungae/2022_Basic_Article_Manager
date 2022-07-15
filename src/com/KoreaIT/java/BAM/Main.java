@@ -60,14 +60,14 @@ public class Main {
 			else if(cmd.startsWith("article detail ")) {
 				String[] cmdArr = cmd.split(" ");
 				
-				int detailNum = Integer.parseInt(cmdArr[2]);
+				int articleNum = Integer.parseInt(cmdArr[2]);
 				
 				Article foundArticle = null;
 				
 				for(int i=0; i<articles.size(); i++) {
 					Article article = articles.get(i);
 					
-					if(article.articleNumber == detailNum) {
+					if(article.articleNumber == articleNum) {
 						foundArticle = article;
 						break;
 					
@@ -75,7 +75,7 @@ public class Main {
 				}
 				
 				if(foundArticle == null) {
-					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", detailNum);
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
 					
 				} else {
 					System.out.printf("번호 : %d\n", foundArticle.articleNumber);
@@ -88,23 +88,27 @@ public class Main {
 			else if(cmd.startsWith("article delete ")) {
 				String[] cmdArr = cmd.split(" ");
 				
-				int deleteNum = Integer.parseInt(cmdArr[2]);
+				int articleNum = Integer.parseInt(cmdArr[2]);
 				
-				boolean deleteArticle = false;
+				Article foundArticle = null;
 				
 				for(int i=0; i<articles.size(); i++) {
 					Article article = articles.get(i);
 					
-					if(article.articleNumber == deleteNum) {
-						deleteArticle = true;
+					if(article.articleNumber == articleNum) {
+						foundArticle = article;
+						break;
 						
-						articles.remove(i);
-						System.out.printf("%d번 게시글이 삭제되었습니다.\n", deleteNum);
 					}
 				}
 				
-				if(deleteArticle == false) {
-					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", deleteNum);
+				if(foundArticle == null) {
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
+					
+				} else {
+					articles.remove(foundArticle);
+					System.out.printf("%d번 게시글이 삭제되었습니다.\n", articleNum);
+					
 				}
 			}
 			else {
