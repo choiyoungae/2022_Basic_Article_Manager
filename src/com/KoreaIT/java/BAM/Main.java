@@ -1,6 +1,4 @@
 package com.KoreaIT.java.BAM;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,17 +31,20 @@ public class Main {
 				if(articles.size() == 0) {					
 					System.out.println("게시글이 없습니다.");
 				} else {
-					System.out.println("번호 | 제목");
+					System.out.println("번호 |    작성일    |  제목");
 					for(int i=articles.size()-1; i>=0; i--) {
 						Article thisArticle = articles.get(i);
-						System.out.printf("%d   | %s\n", thisArticle.articleNumber, thisArticle.title);
+						String[] articleDateTime = thisArticle.regDate.split(" ");
+						String articleDate = articleDateTime[0];
+						System.out.printf("%d   | %s |  %s\n", thisArticle.articleNumber, articleDate, thisArticle.title);
 					}
 				}
 				
 			}
 			else if(cmd.equals("article write")) {
 				
-				LocalDateTime now = LocalDateTime.now();
+//				LocalDateTime now = LocalDateTime.now();
+				String regDate = Util.getNowDateStr();
 				
 				articleNumber++;
 				System.out.printf("제목 : ");
@@ -51,7 +52,7 @@ public class Main {
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
 				
-				Article article = new Article(title, body, articleNumber, now);
+				Article article = new Article(title, body, articleNumber, regDate);
 				articles.add(article);
 				
 				System.out.printf("%d번 글이 생성되었습니다.\n", articleNumber);
@@ -79,7 +80,7 @@ public class Main {
 					
 				} else {
 					System.out.printf("번호 : %d\n", foundArticle.articleNumber);
-					System.out.printf("날짜 : %s\n", foundArticle.formatedNow);
+					System.out.printf("날짜 : %s\n", foundArticle.regDate);
 					System.out.printf("제목 : %s\n", foundArticle.title);
 					System.out.printf("내용 : %s\n", foundArticle.body);
 				}
@@ -110,6 +111,48 @@ public class Main {
 					System.out.printf("%d번 게시글이 삭제되었습니다.\n", articleNum);
 					
 				}
+			}
+			else if(cmd.startsWith("article modify ")) {
+				String[] cmdArr = cmd.split(" ");
+				
+				int articleNum = Integer.parseInt(cmdArr[2]);
+				
+				Article foundArticle = null;
+				
+				for(int i=0; i<articles.size(); i++) {
+					Article article = articles.get(i);
+					
+					if(article.articleNumber == articleNum) {
+						foundArticle = article;
+						break;
+					}
+				}
+				
+				if(foundArticle == null) {
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
+					
+				} else {
+					System.out.println("수정하실 제목과 내용을 작성해주세요.");
+					System.out.printf("제목 : ");
+					String newTitle = sc.nextLine();
+					System.out.printf("내용 : ");
+					String newBody = sc.nextLine();
+					
+					foundArticle.title = newTitle;
+					foundArticle.body = newBody;
+					
+					System.out.printf("%d번 게시글이 수정되었습니다.", articleNum);
+					
+//					굳이 이렇게 새 객체를 만들어서 변경할 필요 없음! 메모리 낭비가 야기될 수 있음
+//					int thisArticleNumber = foundArticle.articleNumber;
+//					LocalDateTime thisArticleNow = foundArticle.now;
+//					
+//					Article newArticle = new Article(newTitle, newBody, thisArticleNumber, thisArticleNow);
+//					
+//					articles.set(articleIdx, newArticle);
+					
+				}
+				
 			}
 			else {
 				System.out.println("존재하지 않는 명령어입니다.");

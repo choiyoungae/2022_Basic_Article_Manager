@@ -7,15 +7,16 @@ public class Article {
 	String title;
 	String body;
 	int articleNumber;
-	LocalDateTime now = LocalDateTime.now();
-	String formatedNow = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+//	LocalDateTime now = LocalDateTime.now();
+//	String formatedNow = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	String regDate;
 	
 	
-	public Article(String title, String body, int articleNumber, LocalDateTime now) {
+	public Article(String title, String body, int articleNumber, String regDate) {
 		super();
 		this.title = title;
 		this.body = body;
 		this.articleNumber = articleNumber;
-		this.now = now;
+		this.regDate = regDate;
 	}
 }
