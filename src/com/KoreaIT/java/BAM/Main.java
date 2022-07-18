@@ -4,14 +4,20 @@ import java.util.Scanner;
 
 public class Main {
 
-	public static void main(String[] args) {
+	private static ArrayList<Article> articles;
+	
+	static {
+		articles = new ArrayList<>();
+	}
 
+	public static void main(String[] args) {
+		
 		System.out.println("== 프로그램 시작 ==");
 
 		Scanner sc = new Scanner(System.in);
-		ArrayList<Article> articles = new ArrayList<>();
 		
-		int articleNumber = 0;
+		makeTestData();
+		int articleNumber = articles.size();
 
 		while (true) {
 			System.out.printf("명령어) ");
@@ -31,12 +37,12 @@ public class Main {
 				if(articles.size() == 0) {					
 					System.out.println("게시글이 없습니다.");
 				} else {
-					System.out.println("번호 |    작성일    |  제목");
+					System.out.println("번호 |    작성일    |    제목    |  조회수");
 					for(int i=articles.size()-1; i>=0; i--) {
 						Article thisArticle = articles.get(i);
 						String[] articleDateTime = thisArticle.regDate.split(" ");
 						String articleDate = articleDateTime[0];
-						System.out.printf("%d   | %s |  %s\n", thisArticle.articleNumber, articleDate, thisArticle.title);
+						System.out.printf("%2d  | %6s | %6s   | %3d\n", thisArticle.articleNumber, articleDate, thisArticle.title, thisArticle.hit);
 					}
 				}
 				
@@ -79,8 +85,11 @@ public class Main {
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
 					
 				} else {
+					foundArticle.increaseHit();
+					
 					System.out.printf("번호 : %d\n", foundArticle.articleNumber);
 					System.out.printf("날짜 : %s\n", foundArticle.regDate);
+					System.out.printf("조회수 : %d\n", foundArticle.hit);
 					System.out.printf("제목 : %s\n", foundArticle.title);
 					System.out.printf("내용 : %s\n", foundArticle.body);
 				}
@@ -163,5 +172,19 @@ public class Main {
 		sc.close();
 
 	}
+	
+	// 테스트 데이터 만들기
+	private static void makeTestData() {
+		
+		String regDate = Util.getNowDateStr();
+				
+		articles.add(new Article("test1", "test1", 1, regDate, 11));
+		articles.add(new Article("test2", "test2", 2, regDate, 22));
+		articles.add(new Article("test3", "test3", 3, regDate, 33));			
+	
+		System.out.println("테스트용 데이터를 생성했습니다.");
+
+	}
+			
 
 }
