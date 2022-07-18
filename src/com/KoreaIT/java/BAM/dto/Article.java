@@ -1,22 +1,22 @@
-package com.KoreaIT.java.BAM;
+package com.KoreaIT.java.BAM.dto;
 
 //import java.time.LocalDateTime;
 //import java.time.format.DateTimeFormatter;
 
 public class Article {
-	String title;
-	String body;
-	int articleNumber;
+	public String title;
+	public String body;
+	public int articleNumber;
 //	LocalDateTime now = LocalDateTime.now();
 //	String formatedNow = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-	String regDate;
-	int hit;
+	public String regDate;
+	public int hit;
 	
-	Article(String title, String body, int articleNumber, String regDate) {
+	public Article(String title, String body, int articleNumber, String regDate) {
 		this(title, body, articleNumber, regDate, 0);
 	}
 	
-	Article(String title, String body, int articleNumber, String regDate, int hit) {
+	public Article(String title, String body, int articleNumber, String regDate, int hit) {
 		this.title = title;
 		this.body = body;
 		this.articleNumber = articleNumber;
