@@ -53,7 +53,6 @@ public class App {
 			}
 			else if(cmd.equals("article write")) {
 				
-//				LocalDateTime now = LocalDateTime.now();
 				String regDate = Util.getNowDateStr();
 				
 				articleNumber++;
@@ -73,17 +72,7 @@ public class App {
 				
 				int articleNum = Integer.parseInt(cmdArr[2]);
 				
-				Article foundArticle = null;
-				
-				for(int i=0; i<articles.size(); i++) {
-					Article article = articles.get(i);
-					
-					if(article.articleNumber == articleNum) {
-						foundArticle = article;
-						break;
-					
-					}
-				}
+				Article foundArticle = getArticleByArticleNum(articleNum);
 				
 				if(foundArticle == null) {
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
@@ -104,19 +93,9 @@ public class App {
 				
 				int articleNum = Integer.parseInt(cmdArr[2]);
 				
-				Article foundArticle = null;
+				int foundArticle = getArticleIndexByArticleNum(articleNum);
 				
-				for(int i=0; i<articles.size(); i++) {
-					Article article = articles.get(i);
-					
-					if(article.articleNumber == articleNum) {
-						foundArticle = article;
-						break;
-						
-					}
-				}
-				
-				if(foundArticle == null) {
+				if(foundArticle == -1) {
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
 					
 				} else {
@@ -130,16 +109,7 @@ public class App {
 				
 				int articleNum = Integer.parseInt(cmdArr[2]);
 				
-				Article foundArticle = null;
-				
-				for(int i=0; i<articles.size(); i++) {
-					Article article = articles.get(i);
-					
-					if(article.articleNumber == articleNum) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticleByArticleNum(articleNum);
 				
 				if(foundArticle == null) {
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
@@ -154,16 +124,8 @@ public class App {
 					foundArticle.title = newTitle;
 					foundArticle.body = newBody;
 					
-					System.out.printf("%d번 게시글이 수정되었습니다.", articleNum);
-					
-//					굳이 이렇게 새 객체를 만들어서 변경할 필요 없음! 메모리 낭비가 야기될 수 있음
-//					int thisArticleNumber = foundArticle.articleNumber;
-//					LocalDateTime thisArticleNow = foundArticle.now;
-//					
-//					Article newArticle = new Article(newTitle, newBody, thisArticleNumber, thisArticleNow);
-//					
-//					articles.set(articleIdx, newArticle);
-					
+					System.out.printf("%d번 게시글이 수정되었습니다.\n", articleNum);
+										
 				}
 				
 			}
@@ -187,5 +149,49 @@ public class App {
 	
 		System.out.println("테스트용 데이터를 생성했습니다.");
 
+	}
+	
+	private int getArticleIndexByArticleNum(int articleNum) {
+		
+		int i=0;
+		
+		for(Article article : articles) {
+			
+			if(article.articleNumber == articleNum) {
+				return i;
+			}
+			i++;
+		}
+		
+		return -1;
+	}
+	
+	private Article getArticleByArticleNum(int articleNum) {
+		
+//		==v3==
+		int index = getArticleIndexByArticleNum(articleNum);
+		
+		if(index != -1) {
+			return articles.get(index);
+		}
+		
+//		for(int i=0; i<articles.size(); i++) {
+//			Article article = articles.get(i);
+//			
+//			if(article.articleNumber == articleNum) {
+//				return article;
+//				
+//			}
+//		}
+		
+//		// 또다른 방법
+//		for(Article article : articles) {
+//			
+//			if(article.articleNumber == articleNum) {
+//				return article;
+//			}
+//		}
+		
+		return null;
 	}
 }
