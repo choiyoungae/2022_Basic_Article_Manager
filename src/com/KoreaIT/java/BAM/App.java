@@ -9,6 +9,7 @@ import com.KoreaIT.java.BAM.util.Util;
 public class App {
 	
 	private ArrayList<Article> articles;
+//	private ArrayList<Article> searchedArticles;
 	
 	public App() {
 		articles = new ArrayList<>();
@@ -37,20 +38,70 @@ public class App {
 				break;
 			}
 
-			if(cmd.equals("article list")) {
+			if(cmd.startsWith("article list")) {
 				if(articles.size() == 0) {					
 					System.out.println("게시글이 없습니다.");
-				} else {
-					System.out.println("번호 |    작성일    |    제목    |  조회수");
-					for(int i=articles.size()-1; i>=0; i--) {
-						Article thisArticle = articles.get(i);
-						String[] articleDateTime = thisArticle.regDate.split(" ");
-						String articleDate = articleDateTime[0];
-						System.out.printf("%2d  | %6s | %6s   | %3d\n", thisArticle.articleNumber, articleDate, thisArticle.title, thisArticle.hit);
+					continue;
+				}
+				
+				String searchKeyword = cmd.substring("article list".length()).trim();
+				
+				ArrayList<Article> forPrintArticles = articles;
+				
+				if(searchKeyword.length() > 0) {
+					forPrintArticles = new ArrayList<>();
+					
+					for(Article article : articles) {
+						if(article.title.contains(searchKeyword)) {
+							forPrintArticles.add(article);
+						}
 					}
+
+					System.out.printf("검색 키워드 : %s\n", searchKeyword);
+					
+					if(forPrintArticles.size() == 0) {
+						System.out.println("검색 결과가 없습니다.");
+						continue;
+					}
+					
+				}
+				
+				System.out.println("번호 |    제목    |    작성일    |  조회수");
+				for(int i=forPrintArticles.size()-1; i>=0; i--) {
+					Article thisArticle = forPrintArticles.get(i);
+					String[] articleDateTime = thisArticle.regDate.split(" ");
+					String articleDate = articleDateTime[0];
+					System.out.printf("%2d  | %6s   | %6s | %3d\n", thisArticle.articleNumber, thisArticle.title, articleDate, thisArticle.hit);
+
 				}
 				
 			}
+//			else if(cmd.startsWith("article list ")) {
+//				String[] cmdArr = cmd.split(" ");
+//				String searchTitle = cmdArr[2];
+//				
+//				searchedArticles = new ArrayList<>();
+//				
+//				for(Article article : articles) {
+//					if(article.title.contains(searchTitle)) {
+//						searchedArticles.add(article);
+//					}
+//				}
+//				
+////				if(searchedArticles.size() == 0) {
+////					System.out.println("게시글이 없습니다.");
+////				} else {
+////					System.out.println("번호 |    작성일    |    제목    |  조회수");
+////					for(int i=searchedArticles.size()-1; i>=0; i--) {
+////						Article thisArticle = searchedArticles.get(i);
+////						String[] articleDateTime = thisArticle.regDate.split(" ");
+////						String articleDate = articleDateTime[0];
+////						System.out.printf("%2d  | %6s | %6s   | %3d\n", thisArticle.articleNumber, articleDate, thisArticle.title, thisArticle.hit);
+////					}
+////				}
+//			
+//				makeList(searchedArticles);
+//			}
 			else if(cmd.equals("article write")) {
 				
 				String regDate = Util.getNowDateStr();
@@ -168,30 +219,26 @@ public class App {
 	
 	private Article getArticleByArticleNum(int articleNum) {
 		
-//		==v3==
 		int index = getArticleIndexByArticleNum(articleNum);
 		
 		if(index != -1) {
 			return articles.get(index);
 		}
 		
-//		for(int i=0; i<articles.size(); i++) {
-//			Article article = articles.get(i);
-//			
-//			if(article.articleNumber == articleNum) {
-//				return article;
-//				
-//			}
-//		}
-		
-//		// 또다른 방법
-//		for(Article article : articles) {
-//			
-//			if(article.articleNumber == articleNum) {
-//				return article;
-//			}
-//		}
-		
 		return null;
 	}
+	
+//	private void makeList(ArrayList<Article> list) {
+//		if(list.size() == 0) {
+//			System.out.println("게시글이 없습니다.");
+//		} else {
+//			System.out.println("번호 |    작성일    |    제목    |  조회수");
+//			for(int i=list.size()-1; i>=0; i--) {
+//				Article thisArticle = list.get(i);
+//				String[] articleDateTime = thisArticle.regDate.split(" ");
+//				String articleDate = articleDateTime[0];
+//				System.out.printf("%2d  | %6s | %6s   | %3d\n", thisArticle.articleNumber, articleDate, thisArticle.title, thisArticle.hit);
+//			}
+//		}
+//	}
 }
