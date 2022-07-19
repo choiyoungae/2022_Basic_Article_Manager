@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.KoreaIT.java.BAM.dto.Article;
+import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.util.Util;
 
 public class App {
 	
 	private ArrayList<Article> articles;
+	private ArrayList<Member> members;
 	
 	public App() {
 		articles = new ArrayList<>();
+		members = new ArrayList<>();
 	}
 
 	public void run() {
@@ -21,7 +24,7 @@ public class App {
 		Scanner sc = new Scanner(System.in);
 		
 		makeTestData();
-		int articleNumber = articles.size();
+		int id = articles.size();
 
 		while (true) {
 			System.out.printf("명령어) ");
@@ -70,7 +73,7 @@ public class App {
 					Article thisArticle = forPrintArticles.get(i);
 					String[] articleDateTime = thisArticle.regDate.split(" ");
 					String articleDate = articleDateTime[0];
-					System.out.printf("%2d  | %6s   | %6s | %3d\n", thisArticle.articleNumber, thisArticle.title, articleDate, thisArticle.hit);
+					System.out.printf("%2d  | %6s   | %6s | %3d\n", thisArticle.id, thisArticle.title, articleDate, thisArticle.hit);
 
 				}
 				
@@ -79,16 +82,16 @@ public class App {
 				
 				String regDate = Util.getNowDateStr();
 				
-				articleNumber++;
+				id++;
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
 				
-				Article article = new Article(title, body, articleNumber, regDate);
+				Article article = new Article(title, body, id, regDate);
 				articles.add(article);
 				
-				System.out.printf("%d번 글이 생성되었습니다.\n", articleNumber);
+				System.out.printf("%d번 글이 생성되었습니다.\n", id);
 				
 			}
 			else if(cmd.startsWith("article detail ")) {
@@ -104,7 +107,7 @@ public class App {
 				} else {
 					foundArticle.increaseHit();
 					
-					System.out.printf("번호 : %d\n", foundArticle.articleNumber);
+					System.out.printf("번호 : %d\n", foundArticle.id);
 					System.out.printf("날짜 : %s\n", foundArticle.regDate);
 					System.out.printf("조회수 : %d\n", foundArticle.hit);
 					System.out.printf("제목 : %s\n", foundArticle.title);
@@ -153,6 +156,28 @@ public class App {
 				}
 				
 			}
+			else if(cmd.equals("member join")) {
+				System.out.println("회원가입을 진행하겠습니다.");
+				System.out.printf("아이디 : ");
+				String loginId = sc.nextLine();
+				System.out.printf("비밀번호 : ");
+				String loginPw = sc.nextLine();
+				System.out.printf("비밀번호 확인 : ");
+				String loginPwConfrim = sc.nextLine();
+				
+				if(!loginPwConfrim.equals(loginPw)) {
+					System.out.println("비밀번호 확인 실패입니다. 다시 진행해주세요.");
+					continue;
+				}
+				
+				System.out.printf("이름 : ");
+				String name = sc.nextLine();
+				
+				Member member = new Member(loginId, loginPw, name);
+				members.add(member);
+				System.out.printf("회원가입이 완료되었습니다. %s님 반갑습니다.\n", member.name);
+				
+			}
 			else {
 				System.out.println("존재하지 않는 명령어입니다.");
 			}
@@ -175,13 +200,13 @@ public class App {
 
 	}
 	
-	private int getArticleIndexByArticleNum(int articleNum) {
+	private int getArticleIndexByArticleNum(int id) {
 		
 		int i=0;
 		
 		for(Article article : articles) {
 			
-			if(article.articleNumber == articleNum) {
+			if(article.id == id) {
 				return i;
 			}
 			i++;

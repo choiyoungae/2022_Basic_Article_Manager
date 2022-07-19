@@ -3,18 +3,18 @@ package com.KoreaIT.java.BAM.dto;
 public class Article {
 	public String title;
 	public String body;
-	public int articleNumber;
+	public int id;
 	public String regDate;
 	public int hit;
 	
-	public Article(String title, String body, int articleNumber, String regDate) {
-		this(title, body, articleNumber, regDate, 0);
+	public Article(String title, String body, int id, String regDate) {
+		this(title, body, id, regDate, 0);
 	}
 	
-	public Article(String title, String body, int articleNumber, String regDate, int hit) {
+	public Article(String title, String body, int id, String regDate, int hit) {
 		this.title = title;
 		this.body = body;
-		this.articleNumber = articleNumber;
+		this.id = id;
 		this.regDate = regDate;
 		this.hit = hit;
 	}
