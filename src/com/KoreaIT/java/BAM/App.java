@@ -9,7 +9,6 @@ import com.KoreaIT.java.BAM.util.Util;
 public class App {
 	
 	private ArrayList<Article> articles;
-//	private ArrayList<Article> searchedArticles;
 	
 	public App() {
 		articles = new ArrayList<>();
@@ -76,32 +75,6 @@ public class App {
 				}
 				
 			}
-//			else if(cmd.startsWith("article list ")) {
-//				String[] cmdArr = cmd.split(" ");
-//				String searchTitle = cmdArr[2];
-//				
-//				searchedArticles = new ArrayList<>();
-//				
-//				for(Article article : articles) {
-//					if(article.title.contains(searchTitle)) {
-//						searchedArticles.add(article);
-//					}
-//				}
-//				
-////				if(searchedArticles.size() == 0) {
-////					System.out.println("게시글이 없습니다.");
-////				} else {
-////					System.out.println("번호 |    작성일    |    제목    |  조회수");
-////					for(int i=searchedArticles.size()-1; i>=0; i--) {
-////						Article thisArticle = searchedArticles.get(i);
-////						String[] articleDateTime = thisArticle.regDate.split(" ");
-////						String articleDate = articleDateTime[0];
-////						System.out.printf("%2d  | %6s | %6s   | %3d\n", thisArticle.articleNumber, articleDate, thisArticle.title, thisArticle.hit);
-////					}
-////				}
-//			
-//				makeList(searchedArticles);
-//			}
 			else if(cmd.equals("article write")) {
 				
 				String regDate = Util.getNowDateStr();
@@ -228,17 +201,4 @@ public class App {
 		return null;
 	}
 	
-//	private void makeList(ArrayList<Article> list) {
-//		if(list.size() == 0) {
-//			System.out.println("게시글이 없습니다.");
-//		} else {
-//			System.out.println("번호 |    작성일    |    제목    |  조회수");
-//			for(int i=list.size()-1; i>=0; i--) {
-//				Article thisArticle = list.get(i);
-//				String[] articleDateTime = thisArticle.regDate.split(" ");
-//				String articleDate = articleDateTime[0];
-//				System.out.printf("%2d  | %6s | %6s   | %3d\n", thisArticle.articleNumber, articleDate, thisArticle.title, thisArticle.hit);
-//			}
-//		}
-//	}
 }
