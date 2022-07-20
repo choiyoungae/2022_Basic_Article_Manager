@@ -3,6 +3,8 @@ package com.KoreaIT.java.BAM;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.KoreaIT.java.BAM.controller.ArticleController;
+import com.KoreaIT.java.BAM.controller.MemberController;
 import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.util.Util;
@@ -24,6 +26,9 @@ public class App {
 		Scanner sc = new Scanner(System.in);
 		
 		makeTestData();
+		
+		MemberController memberController = new MemberController(sc, members);
+		ArticleController articleController = new ArticleController();
 
 		while (true) {
 			System.out.printf("명령어) ");
@@ -156,66 +161,8 @@ public class App {
 				
 			}
 			else if(cmd.equals("member join")) {
-				System.out.println("회원가입을 진행하겠습니다.");
 				
-				int id = members.size() + 1;
-				String regDate = Util.getNowDateStr();
-				
-				String loginId = null;
-
-				while(true) {
-					System.out.printf("아이디 : ");
-					loginId = sc.nextLine();
-					
-					if(isJoinableLoginId(loginId) == false) {
-						System.out.println("이미 사용중인 아이디입니다. 다시 진행해주세요.");
-						continue;
-					}
-					
-					break;
-				}
-				
-//				System.out.printf("아이디 : ");
-//				String loginId = sc.nextLine();
-//				
-//				boolean isItAlreadyExist = false;
-//
-//				for(Member member : members) {
-//					
-//					if(loginId.equals(member.loginId)) {
-//						System.out.println("이미 사용중인 아이디입니다. 다시 진행해주세요.");
-//						isItAlreadyExist = true;
-//						break;
-//					}					
-//				}
-//				
-//				if(isItAlreadyExist == true) {
-//					continue;
-//				}
-				
-				String loginPw = null;
-				String loginPwConfrim = null;
-				
-				while(true) {					
-					System.out.printf("비밀번호 : ");
-					loginPw = sc.nextLine();
-					System.out.printf("비밀번호 확인 : ");
-					loginPwConfrim = sc.nextLine();
-					
-					if(!loginPwConfrim.equals(loginPw)) {
-						System.out.println("비밀번호 확인 실패입니다. 다시 진행해주세요.");
-						continue;
-					}
-					
-					break;
-				}
-				
-				System.out.printf("이름 : ");
-				String name = sc.nextLine();
-				
-				Member member = new Member(loginId, loginPw, name, id, regDate);
-				members.add(member);
-				System.out.printf("회원가입이 완료되었습니다. %s님 반갑습니다.\n", member.name);
+				memberController.doJoin();
 				
 			}
 			else {
@@ -227,26 +174,7 @@ public class App {
 		sc.close();
 	}
 	
-	private boolean isJoinableLoginId(String loginId) {
-		int index = getMemberIndexByLoginId(loginId);
-		
-		if(index == -1) {
-			return true;
-		}
-		
-		return false;
-	}
-
-	private int getMemberIndexByLoginId(String loginId) {
-		
-		for(Member member : members) {
-			if(loginId.equals(member.loginId)) {
-				return member.id;
-			}
-		}
-		
-		return -1;
-	}
+	
 	
 	private void makeTestData() {
 		
