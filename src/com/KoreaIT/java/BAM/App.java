@@ -24,7 +24,6 @@ public class App {
 		Scanner sc = new Scanner(System.in);
 		
 		makeTestData();
-		int id = articles.size();
 
 		while (true) {
 			System.out.printf("명령어) ");
@@ -82,7 +81,7 @@ public class App {
 				
 				String regDate = Util.getNowDateStr();
 				
-				id++;
+				int id = articles.size() + 1;
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
 				System.out.printf("내용 : ");
@@ -97,12 +96,12 @@ public class App {
 			else if(cmd.startsWith("article detail ")) {
 				String[] cmdArr = cmd.split(" ");
 				
-				int articleNum = Integer.parseInt(cmdArr[2]);
+				int id = Integer.parseInt(cmdArr[2]);
 				
-				Article foundArticle = getArticleByArticleNum(articleNum);
+				Article foundArticle = getArticleById(id);
 				
 				if(foundArticle == null) {
-					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 					
 				} else {
 					foundArticle.increaseHit();
@@ -118,28 +117,28 @@ public class App {
 			else if(cmd.startsWith("article delete ")) {
 				String[] cmdArr = cmd.split(" ");
 				
-				int articleNum = Integer.parseInt(cmdArr[2]);
+				int id = Integer.parseInt(cmdArr[2]);
 				
-				int foundArticle = getArticleIndexByArticleNum(articleNum);
+				int foundArticle = getArticleIndexById(id);
 				
 				if(foundArticle == -1) {
-					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 					
 				} else {
 					articles.remove(foundArticle);
-					System.out.printf("%d번 게시글이 삭제되었습니다.\n", articleNum);
+					System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
 					
 				}
 			}
 			else if(cmd.startsWith("article modify ")) {
 				String[] cmdArr = cmd.split(" ");
 				
-				int articleNum = Integer.parseInt(cmdArr[2]);
+				int id = Integer.parseInt(cmdArr[2]);
 				
-				Article foundArticle = getArticleByArticleNum(articleNum);
+				Article foundArticle = getArticleById(id);
 				
 				if(foundArticle == null) {
-					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", articleNum);
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 					
 				} else {
 					System.out.println("수정하실 제목과 내용을 작성해주세요.");
@@ -151,29 +150,70 @@ public class App {
 					foundArticle.title = newTitle;
 					foundArticle.body = newBody;
 					
-					System.out.printf("%d번 게시글이 수정되었습니다.\n", articleNum);
+					System.out.printf("%d번 게시글이 수정되었습니다.\n", id);
 										
 				}
 				
 			}
 			else if(cmd.equals("member join")) {
 				System.out.println("회원가입을 진행하겠습니다.");
-				System.out.printf("아이디 : ");
-				String loginId = sc.nextLine();
-				System.out.printf("비밀번호 : ");
-				String loginPw = sc.nextLine();
-				System.out.printf("비밀번호 확인 : ");
-				String loginPwConfrim = sc.nextLine();
 				
-				if(!loginPwConfrim.equals(loginPw)) {
-					System.out.println("비밀번호 확인 실패입니다. 다시 진행해주세요.");
-					continue;
+				int id = members.size() + 1;
+				String regDate = Util.getNowDateStr();
+				
+				String loginId = null;
+
+				while(true) {
+					System.out.printf("아이디 : ");
+					loginId = sc.nextLine();
+					
+					if(isJoinableLoginId(loginId) == false) {
+						System.out.println("이미 사용중인 아이디입니다. 다시 진행해주세요.");
+						continue;
+					}
+					
+					break;
+				}
+				
+//				System.out.printf("아이디 : ");
+//				String loginId = sc.nextLine();
+//				
+//				boolean isItAlreadyExist = false;
+//
+//				for(Member member : members) {
+//					
+//					if(loginId.equals(member.loginId)) {
+//						System.out.println("이미 사용중인 아이디입니다. 다시 진행해주세요.");
+//						isItAlreadyExist = true;
+//						break;
+//					}					
+//				}
+//				
+//				if(isItAlreadyExist == true) {
+//					continue;
+//				}
+				
+				String loginPw = null;
+				String loginPwConfrim = null;
+				
+				while(true) {					
+					System.out.printf("비밀번호 : ");
+					loginPw = sc.nextLine();
+					System.out.printf("비밀번호 확인 : ");
+					loginPwConfrim = sc.nextLine();
+					
+					if(!loginPwConfrim.equals(loginPw)) {
+						System.out.println("비밀번호 확인 실패입니다. 다시 진행해주세요.");
+						continue;
+					}
+					
+					break;
 				}
 				
 				System.out.printf("이름 : ");
 				String name = sc.nextLine();
 				
-				Member member = new Member(loginId, loginPw, name);
+				Member member = new Member(loginId, loginPw, name, id, regDate);
 				members.add(member);
 				System.out.printf("회원가입이 완료되었습니다. %s님 반갑습니다.\n", member.name);
 				
@@ -187,7 +227,27 @@ public class App {
 		sc.close();
 	}
 	
-	// 테스트 데이터 만들기
+	private boolean isJoinableLoginId(String loginId) {
+		int index = getMemberIndexByLoginId(loginId);
+		
+		if(index == -1) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	private int getMemberIndexByLoginId(String loginId) {
+		
+		for(Member member : members) {
+			if(loginId.equals(member.loginId)) {
+				return member.id;
+			}
+		}
+		
+		return -1;
+	}
+	
 	private void makeTestData() {
 		
 		String regDate = Util.getNowDateStr();
@@ -200,7 +260,7 @@ public class App {
 
 	}
 	
-	private int getArticleIndexByArticleNum(int id) {
+	private int getArticleIndexById(int id) {
 		
 		int i=0;
 		
@@ -215,9 +275,9 @@ public class App {
 		return -1;
 	}
 	
-	private Article getArticleByArticleNum(int articleNum) {
+	private Article getArticleById(int id) {
 		
-		int index = getArticleIndexByArticleNum(articleNum);
+		int index = getArticleIndexById(id);
 		
 		if(index != -1) {
 			return articles.get(index);
