@@ -10,17 +10,33 @@ public class MemberController extends Controller {
 
 	private Scanner sc;
 	private ArrayList<Member> members;
+	private String cmd;
+	private String actionMethodName;
 	
-	public MemberController(Scanner sc, ArrayList<Member> members) {
+	public MemberController(Scanner sc) {
 		this.sc = sc;
-		this.members = members;
-	}
-
-	public void doAction(String cmd) {
 		
+		members = new ArrayList<Member>();
 	}
 
-	public void doJoin() {
+	public void doAction(String cmd, String actionMethodName) {
+		this.cmd = cmd;
+		this.actionMethodName = actionMethodName;
+		
+		switch(actionMethodName) {
+		case "join":
+			doJoin();
+			break;
+		case "login":
+			doLogin();
+			break;
+		default:
+			System.out.println("존재하지 않는 명령어입니다.");
+			break;
+		}
+	}
+
+	private void doJoin() {
 		System.out.println("회원가입을 진행하겠습니다.");
 		
 		int id = members.size() + 1;
@@ -63,6 +79,36 @@ public class MemberController extends Controller {
 		Member member = new Member(loginId, loginPw, name, id, regDate);
 		members.add(member);
 		System.out.printf("회원가입이 완료되었습니다. %s님 반갑습니다.\n", member.name);
+	}
+	
+	private void doLogin() {
+		System.out.println("로그인을 진행하겠습니다.");
+		
+		while(true) {			
+			System.out.printf("아이디 : ");
+			String loginedId = sc.nextLine();
+			System.out.printf("비밀번호 : ");
+			String loginedPw = sc.nextLine();
+			
+			boolean isLoginSuccess = false;
+			
+			for(Member member : members) {
+				if(member.loginId.equals(loginedId)) {
+					if(member.loginPw.equals(loginedPw)) {
+						System.out.printf("%s님 반갑습니다.\n", member.name);
+						isLoginSuccess = true;
+						break;
+					}
+				}
+			}
+			
+			if(isLoginSuccess == false) {
+				System.out.println("아이디 혹은 비밀번호가 맞지 않습니다. 다시 시도하십시오.");
+			} else {
+				break;
+			}
+		}
+		
 	}
 
 	

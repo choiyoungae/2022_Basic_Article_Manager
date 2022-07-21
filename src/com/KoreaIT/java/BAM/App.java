@@ -16,8 +16,6 @@ public class App {
 	private ArrayList<Member> members;
 	
 	public App() {
-		articles = new ArrayList<>();
-		members = new ArrayList<>();
 	}
 
 	public void run() {
@@ -26,10 +24,10 @@ public class App {
 
 		Scanner sc = new Scanner(System.in);
 		
-		makeTestData();
-		
-		MemberController memberController = new MemberController(sc, members);
-		ArticleController articleController = new ArticleController(sc, articles);
+		MemberController memberController = new MemberController(sc);
+		ArticleController articleController = new ArticleController(sc);
+
+		articleController.makeTestData();
 
 		while (true) {
 			System.out.printf("명령어) ");
@@ -53,7 +51,7 @@ public class App {
 			}
 			
 			String controllerName = cmdArr[0];
-//			String actionMethodName = cmdArr[1];
+			String actionMethodName = cmdArr[1];
 			
 			Controller controller = null;
 			
@@ -68,55 +66,14 @@ public class App {
 				continue;
 			}
 			
-			controller.doAction(cmd);
+			controller.doAction(cmd, actionMethodName);
 			
-//			if(cmd.startsWith("article list")) {
-//				articleController.showArticleList(cmd);
-//				
-//			}
-//			else if(cmd.equals("article write")) {
-//				articleController.writeArticle();
-//				
-//			}
-//			else if(cmd.startsWith("article detail ")) {
-//				articleController.showArticle(cmd);
-//				
-//			}
-//			else if(cmd.startsWith("article delete ")) {
-//				articleController.deleteArticle(cmd);
-//				
-//			}
-//			else if(cmd.startsWith("article modify ")) {
-//				articleController.modifyArticle(cmd);
-//				
-//			}
-//			else if(cmd.equals("member join")) {
-//				
-//				memberController.doJoin();
-//				
-//			}
-//			else {
-//				System.out.println("존재하지 않는 명령어입니다.");
-//			}
 		}
 		
 		System.out.println("== 프로그램 끝 ==");
 		sc.close();
 	}
 	
-	
-	
-	private void makeTestData() {
-		
-		String regDate = Util.getNowDateStr();
-				
-		articles.add(new Article("test1", "test1", 1, regDate, 11));
-		articles.add(new Article("test2", "test2", 2, regDate, 22));
-		articles.add(new Article("test3", "test3", 3, regDate, 33));			
-	
-		System.out.println("테스트용 데이터를 생성했습니다.");
-
-	}
 	
 	
 	

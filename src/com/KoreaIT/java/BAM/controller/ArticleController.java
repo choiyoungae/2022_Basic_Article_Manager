@@ -9,17 +9,42 @@ import com.KoreaIT.java.BAM.util.Util;
 public class ArticleController extends Controller {
 	private Scanner sc;
 	private ArrayList<Article> articles;
+	private String cmd;
+	private String actionMethodName;
 	
-	public ArticleController(Scanner sc, ArrayList<Article> articles) {
+	public ArticleController(Scanner sc) {
 		this.sc = sc;
-		this.articles = articles;
+		
+		articles = new ArrayList<Article>();
 	}
 	
-	public void doAction(String cmd) {
+	public void doAction(String cmd, String actionMethodName) {
+		this.cmd = cmd;
+		this.actionMethodName = actionMethodName;
 		
+		switch(actionMethodName) {
+		case "list":
+			showList();
+			break;
+		case "write":
+			doWrite();
+			break;
+		case "detail":
+			showArticle();
+			break;
+		case "modify":
+			doModify();
+			break;
+		case "delete":
+			doDelete();
+			break;
+		default:
+			System.out.println("존재하지 않는 명령어입니다.");
+			break;
+		}
 	}
 
-	public void showArticleList(String cmd) {
+	private void showList() {
 		if(articles.size() == 0) {					
 			System.out.println("게시글이 없습니다.");
 			return;
@@ -58,7 +83,7 @@ public class ArticleController extends Controller {
 		
 	}
 
-	public void writeArticle() {
+	private void doWrite() {
 		String regDate = Util.getNowDateStr();
 		
 		int id = articles.size() + 1;
@@ -73,8 +98,13 @@ public class ArticleController extends Controller {
 		System.out.printf("%d번 글이 생성되었습니다.\n", id);
 	}
 
-	public void showArticle(String cmd) {
+	private void showArticle() {
 		String[] cmdArr = cmd.split(" ");
+		
+		if(cmdArr.length == 2) {
+			System.out.println("명령어를 확인해주세요.");
+			return;
+		}
 		
 		int id = Integer.parseInt(cmdArr[2]);
 		
@@ -94,8 +124,13 @@ public class ArticleController extends Controller {
 		}
 	}
 
-	public void deleteArticle(String cmd) {
+	private void doDelete() {
 		String[] cmdArr = cmd.split(" ");
+		
+		if(cmdArr.length == 2) {
+			System.out.println("명령어를 확인해주세요.");
+			return;
+		}
 		
 		int id = Integer.parseInt(cmdArr[2]);
 		
@@ -111,8 +146,13 @@ public class ArticleController extends Controller {
 		}
 	}
 
-	public void modifyArticle(String cmd) {
+	private void doModify() {
 		String[] cmdArr = cmd.split(" ");
+		
+		if(cmdArr.length == 2) {
+			System.out.println("명령어를 확인해주세요.");
+			return;
+		}
 		
 		int id = Integer.parseInt(cmdArr[2]);
 		
@@ -160,6 +200,16 @@ public class ArticleController extends Controller {
 		}
 		
 		return null;
+	}
+
+	public void makeTestData() {
+		String regDate = Util.getNowDateStr();
+		
+		articles.add(new Article("test1", "test1", 1, regDate, 11));
+		articles.add(new Article("test2", "test2", 2, regDate, 22));
+		articles.add(new Article("test3", "test3", 3, regDate, 33));			
+	
+		System.out.println("테스트용 데이터를 생성했습니다.");
 	}
 
 }
