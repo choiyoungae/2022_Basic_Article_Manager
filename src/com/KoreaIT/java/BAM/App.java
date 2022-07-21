@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.KoreaIT.java.BAM.controller.ArticleController;
+import com.KoreaIT.java.BAM.controller.Controller;
 import com.KoreaIT.java.BAM.controller.MemberController;
 import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
@@ -43,35 +44,60 @@ public class App {
 				System.out.println("프로그램이 종료됩니다.");
 				break;
 			}
-
-			if(cmd.startsWith("article list")) {
-				articleController.showArticleList(cmd);
-				
+			
+			String[] cmdArr = cmd.split(" ");
+			
+			if(cmdArr.length == 1) {
+				System.out.println("명령어를 확인해주세요.");
+				continue;
 			}
-			else if(cmd.equals("article write")) {
-				articleController.writeArticle();
+			
+			String controllerName = cmdArr[0];
+//			String actionMethodName = cmdArr[1];
+			
+			Controller controller = null;
+			
+			if(controllerName.equals("article")) {
+				controller = articleController;
 				
-			}
-			else if(cmd.startsWith("article detail ")) {
-				articleController.showArticle(cmd);
+			} else if(controllerName.equals("member")) {
+				controller = memberController;
 				
-			}
-			else if(cmd.startsWith("article delete ")) {
-				articleController.deleteArticle(cmd);
-				
-			}
-			else if(cmd.startsWith("article modify ")) {
-				articleController.modifyArticle(cmd);
-				
-			}
-			else if(cmd.equals("member join")) {
-				
-				memberController.doJoin();
-				
-			}
-			else {
+			} else {
 				System.out.println("존재하지 않는 명령어입니다.");
+				continue;
 			}
+			
+			controller.doAction(cmd);
+			
+//			if(cmd.startsWith("article list")) {
+//				articleController.showArticleList(cmd);
+//				
+//			}
+//			else if(cmd.equals("article write")) {
+//				articleController.writeArticle();
+//				
+//			}
+//			else if(cmd.startsWith("article detail ")) {
+//				articleController.showArticle(cmd);
+//				
+//			}
+//			else if(cmd.startsWith("article delete ")) {
+//				articleController.deleteArticle(cmd);
+//				
+//			}
+//			else if(cmd.startsWith("article modify ")) {
+//				articleController.modifyArticle(cmd);
+//				
+//			}
+//			else if(cmd.equals("member join")) {
+//				
+//				memberController.doJoin();
+//				
+//			}
+//			else {
+//				System.out.println("존재하지 않는 명령어입니다.");
+//			}
 		}
 		
 		System.out.println("== 프로그램 끝 ==");

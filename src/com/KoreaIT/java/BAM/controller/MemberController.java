@@ -6,7 +6,7 @@ import java.util.Scanner;
 import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.util.Util;
 
-public class MemberController {
+public class MemberController extends Controller {
 
 	private Scanner sc;
 	private ArrayList<Member> members;
@@ -16,6 +16,9 @@ public class MemberController {
 		this.members = members;
 	}
 
+	public void doAction(String cmd) {
+		
+	}
 
 	public void doJoin() {
 		System.out.println("회원가입을 진행하겠습니다.");

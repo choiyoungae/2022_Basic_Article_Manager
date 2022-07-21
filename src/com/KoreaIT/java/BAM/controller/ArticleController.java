@@ -6,13 +6,17 @@ import java.util.Scanner;
 import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller {
 	private Scanner sc;
 	private ArrayList<Article> articles;
 	
 	public ArticleController(Scanner sc, ArrayList<Article> articles) {
 		this.sc = sc;
 		this.articles = articles;
+	}
+	
+	public void doAction(String cmd) {
+		
 	}
 
 	public void showArticleList(String cmd) {
