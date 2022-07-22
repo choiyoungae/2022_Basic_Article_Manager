@@ -211,7 +211,7 @@ public class ArticleController extends Controller {
 		articles.add(new Article("test2", "test2", 2, regDate, 22, "관리자"));
 		articles.add(new Article("test3", "test3", 3, regDate, 33, "관리자"));			
 	
-		System.out.println("테스트용 데이터를 생성했습니다.");
+		System.out.println("테스트용 게시글 데이터를 생성했습니다.");
 	}
 
 }

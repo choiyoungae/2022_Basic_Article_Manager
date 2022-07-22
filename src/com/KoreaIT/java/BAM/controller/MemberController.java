@@ -40,20 +40,12 @@ public class MemberController extends Controller {
 		case "profile":
 			showProfile();
 			break;
+		case "logout":
+			doLogout();
+			break;
 		default:
 			System.out.println("존재하지 않는 명령어입니다.");
 			break;
-		}
-	}
-
-	private void showProfile() {
-		if(loginedMember == null) {
-			System.out.println("로그아웃 상태입니다.");
-			
-		} else {
-			System.out.println("== 현재 로그인 한 회원 정보 ==");
-			System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
-			System.out.printf("이름 : %s\n", loginedMember.name);
 		}
 	}
 
@@ -104,7 +96,7 @@ public class MemberController extends Controller {
 	
 	private void doLogin() {
 		
-		if(loginedMember != null) {
+		if(isLogined() == true) {
 			System.out.println("이미 로그인되어있습니다.");
 			return;
 		}
@@ -134,25 +126,35 @@ public class MemberController extends Controller {
 				return;
 			}
 			
-//			for(Member member : members) {
-//				if(member.loginId.equals(loginedId)) {
-//					if(member.loginPw.equals(loginedPw)) {
-//						System.out.printf("%s님 반갑습니다.\n", member.name);
-//						loginedMember = member;
-//						break;
-//					}
-//				}
-//			}
-//			
-//			if(loginedMember == null) {
-//				System.out.println("아이디 혹은 비밀번호가 맞지 않습니다. 다시 시도하십시오.");
-//			} else {
-//				break;
-//			}
 		}
 		
 	}
 	
+	private void doLogout() {
+		if(isLogined() == false) {
+			System.out.println("이미 로그아웃 상태입니다.");
+			return;
+		}
+		
+		loginedMember = null;
+		System.out.println("로그아웃 되었습니다.");
+	}
+
+	private void showProfile() {
+		if(isLogined() == false) {
+			System.out.println("로그아웃 상태입니다.");
+			return;
+		}
+		
+		System.out.println("== 현재 로그인 한 회원 정보 ==");
+		System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
+		System.out.printf("이름 : %s\n", loginedMember.name);
+		
+	}
+	
+	private boolean isLogined() {
+		return loginedMember != null;
+	}
 	
 	private Member getMemberByLoginId(String loginId) {
 		int index = getMemberIndexByLoginId(loginId);
@@ -161,7 +163,7 @@ public class MemberController extends Controller {
 			return null;
 		}
 		
-		return members.get(index-1);
+		return members.get(index);
 	}
 	
 	private boolean isJoinableLoginId(String loginId) {
@@ -176,10 +178,13 @@ public class MemberController extends Controller {
 
 	private int getMemberIndexByLoginId(String loginId) {
 		
+		int i=0;
+		
 		for(Member member : members) {
 			if(loginId.equals(member.loginId)) {
-				return member.id;
+				return i;
 			}
+			i++;
 		}
 		
 		return -1;
@@ -192,6 +197,6 @@ public class MemberController extends Controller {
 		members.add(new Member("test2", "test2", "test2", 2, regDate));
 		members.add(new Member("test3", "test3", "test3", 3, regDate));			
 	
-		System.out.println("테스트용 데이터를 생성했습니다.");
+		System.out.println("테스트용 회원 데이터를 생성했습니다.");
 	}
 }
