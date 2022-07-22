@@ -12,9 +12,6 @@ import com.KoreaIT.java.BAM.util.Util;
 
 public class App {
 	
-	private ArrayList<Article> articles;
-	private ArrayList<Member> members;
-	
 	public App() {
 	}
 
@@ -28,6 +25,7 @@ public class App {
 		ArticleController articleController = new ArticleController(sc);
 
 		articleController.makeTestData();
+		memberController.makeTestData();
 
 		while (true) {
 			System.out.printf("¸í·É¾î) ");
