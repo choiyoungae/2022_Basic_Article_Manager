@@ -93,11 +93,6 @@ public class MemberController extends Controller {
 	
 	private void doLogin() {
 		
-		if(isLogined() == true) {
-			System.out.println("이미 로그인되어있습니다.");
-			return;
-		}
-		
 		System.out.println("로그인을 진행하겠습니다.");
 		
 		while(true) {			
@@ -128,10 +123,6 @@ public class MemberController extends Controller {
 	}
 	
 	private void doLogout() {
-		if(isLogined() == false) {
-			System.out.println("이미 로그아웃 상태입니다.");
-			return;
-		}
 		
 		loginedMember = null;
 		System.out.println("로그아웃 되었습니다.");

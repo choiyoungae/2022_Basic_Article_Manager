@@ -27,10 +27,6 @@ public class ArticleController extends Controller {
 			showList();
 			break;
 		case "write":
-			if(isLogined() == false) {
-				System.out.println("로그인 후 이용해주세요.");
-				break;
-			}
 			doWrite();
 			break;
 		case "detail":
@@ -139,16 +135,22 @@ public class ArticleController extends Controller {
 		
 		int id = Integer.parseInt(cmdArr[2]);
 		
-		int foundArticle = getArticleIndexById(id);
+		Article foundArticle = getArticleById(id);
 		
-		if(foundArticle == -1) {
+		if(foundArticle == null) {
 			System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
-			
-		} else {
-			articles.remove(foundArticle);
-			System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
-			
+			return;
 		}
+		
+		if(foundArticle.memberId != loginedMember.id) {				
+			System.out.println("본인이 작성한 글만 변경 가능합니다.");
+			return;
+		}
+		
+		articles.remove(foundArticle);
+		System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
+			
+		
 	}
 
 	private void doModify() {
@@ -165,21 +167,29 @@ public class ArticleController extends Controller {
 		
 		if(foundArticle == null) {
 			System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
+			return;
 			
-		} else {
-			System.out.println("수정하실 제목과 내용을 작성해주세요.");
-			System.out.printf("제목 : ");
-			String newTitle = sc.nextLine();
-			System.out.printf("내용 : ");
-			String newBody = sc.nextLine();
+		} 
 			
-			foundArticle.title = newTitle;
-			foundArticle.body = newBody;
+		if(foundArticle.memberId != loginedMember.id) {				
+			System.out.println("본인이 작성한 글만 변경 가능합니다.");
+			return;
 			
-			System.out.printf("%d번 게시글이 수정되었습니다.\n", id);
-								
-		}		
-	}
+		}
+		
+		System.out.println("수정하실 제목과 내용을 작성해주세요.");
+		System.out.printf("제목 : ");
+		String newTitle = sc.nextLine();
+		System.out.printf("내용 : ");
+		String newBody = sc.nextLine();
+		
+		foundArticle.title = newTitle;
+		foundArticle.body = newBody;
+		
+		System.out.printf("%d번 게시글이 수정되었습니다.\n", id);
+		
+	}		
+	
 	
 	private int getArticleIndexById(int id) {
 		
