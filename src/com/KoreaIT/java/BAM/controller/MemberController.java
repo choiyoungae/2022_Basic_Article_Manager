@@ -12,7 +12,6 @@ public class MemberController extends Controller {
 	private ArrayList<Member> members;
 	private String cmd;
 	private String actionMethodName;
-	private Member loginedMember;
 
 	public Member getLoginedMember() {
 		return loginedMember;
@@ -20,7 +19,6 @@ public class MemberController extends Controller {
 	
 	public MemberController(Scanner sc) {
 		this.sc = sc;
-		this.loginedMember = null;
 		
 		members = new ArrayList<Member>();
 	}
@@ -151,10 +149,6 @@ public class MemberController extends Controller {
 		
 	}
 	
-	private boolean isLogined() {
-		return loginedMember != null;
-	}
-	
 	private Member getMemberByLoginId(String loginId) {
 		int index = getMemberIndexByLoginId(loginId);
 		
@@ -192,9 +186,9 @@ public class MemberController extends Controller {
 	public void makeTestData() {
 		String regDate = Util.getNowDateStr();
 		
-		members.add(new Member("test1", "test1", "test1", 1, regDate));
-		members.add(new Member("test2", "test2", "test2", 2, regDate));
-		members.add(new Member("test3", "test3", "test3", 3, regDate));			
+		members.add(new Member("test1", "test1", "관리자1", 1, regDate));
+		members.add(new Member("test2", "test2", "관리자2", 2, regDate));
+		members.add(new Member("test3", "test3", "관리자3", 3, regDate));			
 	
 		System.out.println("테스트용 회원 데이터를 생성했습니다.");
 	}

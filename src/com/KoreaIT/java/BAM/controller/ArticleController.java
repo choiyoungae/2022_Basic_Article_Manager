@@ -27,6 +27,10 @@ public class ArticleController extends Controller {
 			showList();
 			break;
 		case "write":
+			if(isLogined() == false) {
+				System.out.println("로그인 후 이용해주세요.");
+				break;
+			}
 			doWrite();
 			break;
 		case "detail":
@@ -77,7 +81,7 @@ public class ArticleController extends Controller {
 			Article thisArticle = forPrintArticles.get(i);
 			String[] articleDateTime = thisArticle.regDate.split(" ");
 			String articleDate = articleDateTime[0];
-			System.out.printf("%2d  | %6s   | %6s | %4d   | %4s\n", thisArticle.id, thisArticle.title, articleDate, thisArticle.hit, thisArticle.writer);
+			System.out.printf("%2d  | %6s   | %6s | %4d   | %4s\n", thisArticle.id, thisArticle.title, articleDate, thisArticle.hit, thisArticle.memberId);
 
 		}
 		
@@ -92,7 +96,7 @@ public class ArticleController extends Controller {
 		System.out.printf("내용 : ");
 		String body = sc.nextLine();
 		
-		Article article = new Article(title, body, id, regDate);
+		Article article = new Article(title, body, id, regDate, loginedMember.id);
 		articles.add(article);
 		
 		System.out.printf("%d번 글이 생성되었습니다.\n", id);
@@ -118,7 +122,7 @@ public class ArticleController extends Controller {
 			
 			System.out.printf("번호 : %d\n", foundArticle.id);
 			System.out.printf("날짜 : %s\n", foundArticle.regDate);
-			System.out.printf("작성자 : %s\n", foundArticle.writer);
+			System.out.printf("작성자 : %s\n", foundArticle.memberId);
 			System.out.printf("조회수 : %d\n", foundArticle.hit);
 			System.out.printf("제목 : %s\n", foundArticle.title);
 			System.out.printf("내용 : %s\n", foundArticle.body);
@@ -206,9 +210,9 @@ public class ArticleController extends Controller {
 	public void makeTestData() {
 		String regDate = Util.getNowDateStr();
 		
-		articles.add(new Article("test1", "test1", 1, regDate, 11, "관리자"));
-		articles.add(new Article("test2", "test2", 2, regDate, 22, "관리자"));
-		articles.add(new Article("test3", "test3", 3, regDate, 33, "관리자"));			
+		articles.add(new Article("test1", "test1", 1, regDate, 11, 1));
+		articles.add(new Article("test2", "test2", 2, regDate, 22, 2));
+		articles.add(new Article("test3", "test3", 3, regDate, 33, 3));			
 	
 		System.out.println("테스트용 게시글 데이터를 생성했습니다.");
 	}
