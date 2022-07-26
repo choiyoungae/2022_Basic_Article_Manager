@@ -3,17 +3,20 @@ package com.KoreaIT.java.BAM.controller;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.KoreaIT.java.BAM.container.Container;
 import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller {
 	private Scanner sc;
-	private ArrayList<Article> articles;
 	private String cmd;
 	private String actionMethodName;
+	public static ArrayList<Article> articles;
+	private int articlesStartSize;
 	
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
+		this.articlesStartSize = 0;
 		
 		articles = new ArrayList<Article>();
 	}
@@ -77,7 +80,9 @@ public class ArticleController extends Controller {
 			Article thisArticle = forPrintArticles.get(i);
 			String[] articleDateTime = thisArticle.regDate.split(" ");
 			String articleDate = articleDateTime[0];
-			System.out.printf("%2d  | %6s   | %6s | %4d   | %4s\n", thisArticle.id, thisArticle.title, articleDate, thisArticle.hit, thisArticle.memberId);
+			ArrayList<Member> members = Container.memberDao.members;
+			String thisArticleWriter = members.get((thisArticle.memberId)-1).name;
+			System.out.printf("%2d  | %6s   | %6s | %4d   | %4s\n", thisArticle.id, thisArticle.title, articleDate, thisArticle.hit, thisArticleWriter);
 
 		}
 		
@@ -86,7 +91,7 @@ public class ArticleController extends Controller {
 	private void doWrite() {
 		String regDate = Util.getNowDateStr();
 		
-		int id = articles.size() + 1;
+		int id = ++articlesStartSize;
 		System.out.printf("제목 : ");
 		String title = sc.nextLine();
 		System.out.printf("내용 : ");
@@ -115,10 +120,11 @@ public class ArticleController extends Controller {
 			
 		} else {
 			foundArticle.increaseHit();
+			String thisArticleWriter = members.get((foundArticle.memberId)-1).name;
 			
 			System.out.printf("번호 : %d\n", foundArticle.id);
 			System.out.printf("날짜 : %s\n", foundArticle.regDate);
-			System.out.printf("작성자 : %s\n", foundArticle.memberId);
+			System.out.printf("작성자 : %s\n", thisArticleWriter);
 			System.out.printf("조회수 : %d\n", foundArticle.hit);
 			System.out.printf("제목 : %s\n", foundArticle.title);
 			System.out.printf("내용 : %s\n", foundArticle.body);
@@ -219,6 +225,7 @@ public class ArticleController extends Controller {
 
 	public void makeTestData() {
 		String regDate = Util.getNowDateStr();
+		articlesStartSize = 3;
 		
 		articles.add(new Article("test1", "test1", 1, regDate, 11, 1));
 		articles.add(new Article("test2", "test2", 2, regDate, 22, 2));

@@ -9,9 +9,9 @@ import com.KoreaIT.java.BAM.util.Util;
 public class MemberController extends Controller {
 
 	private Scanner sc;
-	private ArrayList<Member> members;
 	private String cmd;
 	private String actionMethodName;
+	public static ArrayList<Member> members;
 
 	public Member getLoginedMember() {
 		return loginedMember;
@@ -100,6 +100,16 @@ public class MemberController extends Controller {
 			String loginId = sc.nextLine();
 			System.out.printf("비밀번호 : ");
 			String loginPw = sc.nextLine();
+			
+			if(loginId.length() == 0) {
+				System.out.println("아이디가 입력되지 않았습니다.");
+				return;
+			}
+			
+			if(loginPw.length() == 0) {
+				System.out.println("비밀번호가 입력되지 않았습니다.");
+				return;
+			}
 			
 			Member member = getMemberByLoginId(loginId);
 			
