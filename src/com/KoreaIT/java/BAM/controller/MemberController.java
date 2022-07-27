@@ -3,6 +3,7 @@ package com.KoreaIT.java.BAM.controller;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.KoreaIT.java.BAM.container.Container;
 import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.util.Util;
 
@@ -20,7 +21,7 @@ public class MemberController extends Controller {
 	public MemberController(Scanner sc) {
 		this.sc = sc;
 		
-		members = new ArrayList<Member>();
+		members = Container.memberDao.members;
 	}
 
 	public void doAction(String cmd, String actionMethodName) {
@@ -87,7 +88,7 @@ public class MemberController extends Controller {
 		String name = sc.nextLine();
 		
 		Member member = new Member(loginId, loginPw, name, id, regDate);
-		members.add(member);
+		Container.memberDao.add(member);
 		System.out.printf("회원가입이 완료되었습니다. %s님 반갑습니다.\n", member.name);
 	}
 	
@@ -187,9 +188,9 @@ public class MemberController extends Controller {
 	public void makeTestData() {
 		String regDate = Util.getNowDateStr();
 		
-		members.add(new Member("test1", "test1", "관리자1", 1, regDate));
-		members.add(new Member("test2", "test2", "관리자2", 2, regDate));
-		members.add(new Member("test3", "test3", "관리자3", 3, regDate));			
+		Container.memberDao.add(new Member("test1", "test1", "관리자1", Container.memberDao.getNewId(), regDate));
+		Container.memberDao.add(new Member("test2", "test2", "관리자2", Container.memberDao.getNewId(), regDate));
+		Container.memberDao.add(new Member("test3", "test3", "관리자3", Container.memberDao.getNewId(), regDate));			
 	
 		System.out.println("테스트용 회원 데이터를 생성했습니다.");
 	}

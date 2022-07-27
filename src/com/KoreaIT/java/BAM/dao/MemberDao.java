@@ -4,10 +4,15 @@ import java.util.ArrayList;
 
 import com.KoreaIT.java.BAM.dto.Member;
 
-public class MemberDao {
+public class MemberDao extends Dao {
 	public ArrayList<Member> members;
 
 	public MemberDao() {
 		members = new ArrayList<>();
+	}
+	
+	public void add(Member member) {
+		members.add(member);
+		lastId++;
 	}
 }

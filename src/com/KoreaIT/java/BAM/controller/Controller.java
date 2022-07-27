@@ -1,8 +1,6 @@
 package com.KoreaIT.java.BAM.controller;
 
-import java.util.ArrayList;
 
-import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
 
 public abstract class Controller {
