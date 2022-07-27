@@ -17,7 +17,7 @@ public class ArticleController extends Controller {
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
 		
-		articles = Container.articleDao.articles;
+		articles = Container.articleDao.getArticles();
 	}
 	
 	public void doAction(String cmd, String actionMethodName) {
@@ -54,24 +54,15 @@ public class ArticleController extends Controller {
 		
 		String searchKeyword = cmd.substring("article list".length()).trim();
 		
-		ArrayList<Article> forPrintArticles = articles;
-		
-		if(searchKeyword.length() > 0) {
-			forPrintArticles = new ArrayList<>();
-			
-			for(Article article : articles) {
-				if(article.title.contains(searchKeyword)) {
-					forPrintArticles.add(article);
-				}
-			}
+		ArrayList<Article> forPrintArticles = Container.articleService.getForPrintArticles(searchKeyword);
 
-			System.out.printf("검색 키워드 : %s\n", searchKeyword);
-			
-			if(forPrintArticles.size() == 0) {
-				System.out.println("검색 결과가 없습니다.");
-				return;
-			}
-			
+		if(searchKeyword != null && searchKeyword.length() != 0) {
+			System.out.printf("검색 키워드 : %s\n", searchKeyword);			
+		}
+		
+		if(forPrintArticles.size() == 0) {
+			System.out.println("검색 결과가 없습니다.");
+			return;
 		}
 		
 		System.out.println("번호 |    제목    |    작성일    |  조회수  |  작성자");
