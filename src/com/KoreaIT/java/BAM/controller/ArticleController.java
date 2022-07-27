@@ -97,7 +97,7 @@ public class ArticleController extends Controller {
 	private void doWrite() {
 		String regDate = Util.getNowDateStr();
 		
-		int id = Container.articleDao.getNewId();
+		int id = Container.articleDao.setNewId();
 		System.out.printf("제목 : ");
 		String title = sc.nextLine();
 		System.out.printf("내용 : ");
@@ -127,7 +127,13 @@ public class ArticleController extends Controller {
 		} else {
 			foundArticle.increaseHit();
 			ArrayList<Member> members = Container.memberDao.members;
-			String thisArticleWriter = members.get((foundArticle.memberId)-1).name;
+			String thisArticleWriter = null;
+
+			for(Member member : members) {
+				if(member.id == foundArticle.memberId) {
+					thisArticleWriter = member.name;
+				}
+			}
 			
 			System.out.printf("번호 : %d\n", foundArticle.id);
 			System.out.printf("날짜 : %s\n", foundArticle.regDate);
@@ -233,9 +239,9 @@ public class ArticleController extends Controller {
 	public void makeTestData() {
 		String regDate = Util.getNowDateStr();
 		
-		Container.articleDao.add(new Article("test1", "test1", Container.articleDao.getNewId(), regDate, 11, 1));
-		Container.articleDao.add(new Article("test2", "test2", Container.articleDao.getNewId(), regDate, 22, 2));
-		Container.articleDao.add(new Article("test3", "test3", Container.articleDao.getNewId(), regDate, 33, 3));			
+		Container.articleDao.add(new Article("test1", "test1", Container.articleDao.setNewId(), regDate, 11, 1));
+		Container.articleDao.add(new Article("test2", "test2", Container.articleDao.setNewId(), regDate, 22, 2));
+		Container.articleDao.add(new Article("test3", "test3", Container.articleDao.setNewId(), regDate, 33, 3));			
 	
 		System.out.println("테스트용 게시글 데이터를 생성했습니다.");
 	}

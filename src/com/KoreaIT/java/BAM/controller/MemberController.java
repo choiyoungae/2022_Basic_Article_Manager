@@ -50,7 +50,7 @@ public class MemberController extends Controller {
 	private void doJoin() {
 		System.out.println("회원가입을 진행하겠습니다.");
 		
-		int id = members.size() + 1;
+		int id = Container.memberDao.setNewId();
 		String regDate = Util.getNowDateStr();
 		
 		String loginId = null;
@@ -96,20 +96,31 @@ public class MemberController extends Controller {
 		
 		System.out.println("로그인을 진행하겠습니다.");
 		
-		while(true) {			
-			System.out.printf("아이디 : ");
-			String loginId = sc.nextLine();
-			System.out.printf("비밀번호 : ");
-			String loginPw = sc.nextLine();
+		while(true) {
+			String loginId = null;
+			String loginPw = null;
 			
-			if(loginId.length() == 0) {
-				System.out.println("아이디가 입력되지 않았습니다.");
-				return;
+			while(true) {
+				System.out.printf("아이디 : ");
+				loginId = sc.nextLine();
+				
+				if(loginId.trim().length() == 0) {
+					System.out.println("아이디가 입력되지 않았습니다.");
+					continue;
+				}
+				break;
 			}
 			
-			if(loginPw.length() == 0) {
-				System.out.println("비밀번호가 입력되지 않았습니다.");
-				return;
+			while(true) {
+				System.out.printf("비밀번호 : ");
+				loginPw = sc.nextLine();
+				
+				
+				if(loginPw.trim().length() == 0) {
+					System.out.println("비밀번호가 입력되지 않았습니다.");
+					continue;
+				}
+				break;
 			}
 			
 			Member member = getMemberByLoginId(loginId);
@@ -188,9 +199,9 @@ public class MemberController extends Controller {
 	public void makeTestData() {
 		String regDate = Util.getNowDateStr();
 		
-		Container.memberDao.add(new Member("test1", "test1", "관리자1", Container.memberDao.getNewId(), regDate));
-		Container.memberDao.add(new Member("test2", "test2", "관리자2", Container.memberDao.getNewId(), regDate));
-		Container.memberDao.add(new Member("test3", "test3", "관리자3", Container.memberDao.getNewId(), regDate));			
+		Container.memberDao.add(new Member("test1", "test1", "관리자1", Container.memberDao.setNewId(), regDate));
+		Container.memberDao.add(new Member("test2", "test2", "관리자2", Container.memberDao.setNewId(), regDate));
+		Container.memberDao.add(new Member("test3", "test3", "관리자3", Container.memberDao.setNewId(), regDate));			
 	
 		System.out.println("테스트용 회원 데이터를 생성했습니다.");
 	}
