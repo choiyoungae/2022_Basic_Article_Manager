@@ -6,18 +6,19 @@ import java.util.Scanner;
 import com.KoreaIT.java.BAM.container.Container;
 import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
+import com.KoreaIT.java.BAM.service.ArticleService;
 import com.KoreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller {
 	private Scanner sc;
 	private String cmd;
 	private String actionMethodName;
-	public static ArrayList<Article> articles;
+	private ArticleService articleService;
 	
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
 		
-		articles = Container.articleDao.getArticles();
+		articleService = Container.articleService;
 	}
 	
 	public void doAction(String cmd, String actionMethodName) {
@@ -47,14 +48,10 @@ public class ArticleController extends Controller {
 	}
 
 	private void showList() {
-		if(articles.size() == 0) {					
-			System.out.println("게시글이 없습니다.");
-			return;
-		}
 		
 		String searchKeyword = cmd.substring("article list".length()).trim();
 		
-		ArrayList<Article> forPrintArticles = Container.articleService.getForPrintArticles(searchKeyword);
+		ArrayList<Article> forPrintArticles = articleService.getForPrintArticles(searchKeyword);
 
 		if(searchKeyword != null && searchKeyword.length() != 0) {
 			System.out.printf("검색 키워드 : %s\n", searchKeyword);			
@@ -88,14 +85,14 @@ public class ArticleController extends Controller {
 	private void doWrite() {
 		String regDate = Util.getNowDateStr();
 		
-		int id = Container.articleDao.setNewId();
+		int id = articleService.setNewId();
 		System.out.printf("제목 : ");
 		String title = sc.nextLine();
 		System.out.printf("내용 : ");
 		String body = sc.nextLine();
 		
 		Article article = new Article(title, body, id, regDate, loginedMember.id);
-		Container.articleDao.add(article);
+		articleService.add(article);
 		
 		System.out.printf("%d번 글이 생성되었습니다.\n", id);
 	}
@@ -110,7 +107,7 @@ public class ArticleController extends Controller {
 		
 		int id = Integer.parseInt(cmdArr[2]);
 		
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 		
 		if(foundArticle == null) {
 			System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
@@ -145,7 +142,7 @@ public class ArticleController extends Controller {
 		
 		int id = Integer.parseInt(cmdArr[2]);
 		
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 		
 		if(foundArticle == null) {
 			System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
@@ -157,7 +154,7 @@ public class ArticleController extends Controller {
 			return;
 		}
 		
-		articles.remove(foundArticle);
+		articleService.remove(foundArticle);
 		System.out.printf("%d번 게시글이 삭제되었습니다.\n", id);
 			
 		
@@ -173,7 +170,7 @@ public class ArticleController extends Controller {
 		
 		int id = Integer.parseInt(cmdArr[2]);
 		
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 		
 		if(foundArticle == null) {
 			System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
@@ -200,39 +197,12 @@ public class ArticleController extends Controller {
 		
 	}		
 	
-	
-	private int getArticleIndexById(int id) {
-		
-		int i=0;
-		
-		for(Article article : articles) {
-			
-			if(article.id == id) {
-				return i;
-			}
-			i++;
-		}
-		
-		return -1;
-	}
-	
-	private Article getArticleById(int id) {
-		
-		int index = getArticleIndexById(id);
-		
-		if(index != -1) {
-			return articles.get(index);
-		}
-		
-		return null;
-	}
-
 	public void makeTestData() {
 		String regDate = Util.getNowDateStr();
 		
-		Container.articleDao.add(new Article("test1", "test1", Container.articleDao.setNewId(), regDate, 11, 1));
-		Container.articleDao.add(new Article("test2", "test2", Container.articleDao.setNewId(), regDate, 22, 2));
-		Container.articleDao.add(new Article("test3", "test3", Container.articleDao.setNewId(), regDate, 33, 3));			
+		articleService.add(new Article("test1", "test1", articleService.setNewId(), regDate, 11, 1));
+		articleService.add(new Article("test2", "test2", articleService.setNewId(), regDate, 22, 2));
+		articleService.add(new Article("test3", "test3", articleService.setNewId(), regDate, 33, 3));			
 	
 		System.out.println("테스트용 게시글 데이터를 생성했습니다.");
 	}
